@@ -1,40 +1,31 @@
 import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Sira sayini girin");
-        int rows = scanner.nextInt();
-        System.out.println("Nece oturacaq var");
-        int seats = scanner.nextInt();
-        Cinema cinema = new Cinema(rows, seats);
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Setir sayi: "); int r = sc.nextInt();
+        System.out.print("Oturacaq sayi: "); int s = sc.nextInt();
+        Cinema c = new Cinema(r, s);
 
-        int choice;
-        do {
-            System.out.println("\n1. Oturacaqları göstər");
-            System.out.println("2. Bilet al");
-            System.out.println("3. Statistik məlumat");
-            System.out.println("4. Çıxış");
-            System.out.print("Seçiminizi edin: ");
-            choice = scanner.nextInt();
-            switch (choice) {
-                case 1:
-                    cinema.showCinema();
-                    break;
-                case 2:
-                    cinema.buyTicket(scanner);
-                    break;
-                case 3:
-                    cinema.statistics();
-                    break;
-                case 4:
-                    System.out.println("Proqram bitdi.");
-                    break;
-                default:
-                    System.out.println("Yanlış seçim! Yenidən cəhd edin.");
+        while (true) {
+            System.out.println("\n1. oturacaqlari goster\n2. Bilet al\n3. statistikaya bax bax\n4. cixis");
+            int ch = sc.nextInt();
+            switch (ch) {
+                case 1 -> c.showSeats();
+                case 2 -> {
+                    System.out.print("Setir: "); int row = sc.nextInt() - 1;
+                    System.out.print("Oturacaq: "); int seat = sc.nextInt() - 1;
+                    if (row >= 0 && row < r && seat >= 0 && seat < s)
+                        c.buyTicket(row, seat);
+                    else System.out.println("Yalnis secim.");
+                }
+                case 3 -> c.showStats();
+                case 4 -> System.exit(0);
+                default -> System.out.println("yalnis secim.");
             }
-        } while (choice != 4);
+        }
     }
-
 }
+
 
 

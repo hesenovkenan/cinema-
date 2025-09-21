@@ -1,71 +1,46 @@
-
-import java.util.Scanner;
 public class Cinema {
-    int rows;
-    int seats;
+    int rows, seats, sold = 0, income = 0;
     String[][] cinemaHall;
-    int purchasedTickets = 0;
-    int currentIncome = 0;
 
-
-    public Cinema(int rows, int seats) {
-        this.rows = rows;
-        this.seats = seats;
-        cinemaHall = new String[rows][seats];
-
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < seats; j++) {
+    public Cinema(int r, int s) {
+        rows = r; seats = s;
+      cinemaHall = new String[r][s];
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < s; j++)
                 cinemaHall[i][j] = "S";
-            }
-        }
     }
 
-
-    int calculateTicketPrice(int row) {
-        int totalSeats = rows * seats;
-
-        if (totalSeats <= 60) {
-            return 10;
-        } else {
-            int frontHalf = rows / 2;
-            return (row <= frontHalf) ? 10 : 8;
-        }
-    }
-
-
-    void showCinema() {
-        System.out.println("\nCinema:");
+    public void showSeats() {
+        System.out.print("  ");
+        for (int i = 1; i <= seats; i++) System.out.print(i + " ");
+        System.out.println();
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < seats; j++) {
+            System.out.print((i + 1) + " ");
+            for (int j = 0; j < seats; j++)
                 System.out.print(cinemaHall[i][j] + " ");
-            }
             System.out.println();
         }
     }
 
-     void buyTicket(Scanner sc) {
-        System.out.print("Sıranin nömrəsini daxil et: ");
-        int row= sc.nextInt();
-        System.out.print("Oturacaq nömrəsini daxil et: ");
-        int seat = sc.nextInt();
-
-        if (cinemaHall[row - 1][seat - 1].equals("B")) {
-            System.out.println("Bu yer artıq alınıb!");
-        } else {
-            int ticketPrice = calculateTicketPrice(row);
-            System.out.println("Ticket price: " + ticketPrice + " AZN");
-            cinemaHall[row - 1][seat - 1] = "B";
-            purchasedTickets++;
-            currentIncome += ticketPrice;
+    public void buyTicket(int r, int s) {
+        if (cinemaHall[r][s].equals("B")) {
+            System.out.println("Oturacaq artıq bron edilib.");
+            return;
         }
+        int price = (rows * seats < 60 || r < rows / 2) ? 10 : 8;
+        cinemaHall[r][s] = "B";
+        sold++; income += price;
+        System.out.println("Bilet qiyməti: " + price + " AZN");
     }
 
-
-    void statistics() {
-        System.out.println(purchasedTickets + "  satilmis biletler");
-        System.out.println(currentIncome + " AZN");
+    public void showStats() {
+        int total = rows * seats, full = 0;
+        for (int i = 0; i < rows; i++)
+            full += seats * ((total < 60 || i < rows / 2) ? 10 : 8);
+        double percent = sold * 100.0 / total;
+        System.out.printf("Satilmis biletler : %d\n", sold);
+        System.out.printf("Bron edilmis faiz: %.2f%%\n", percent);
+        System.out.printf("Cari gelir: %d AZN\n", income);
+        System.out.printf("Mumkun maksimum gelir: %d AZN\n", income);
     }
 }
-
-
